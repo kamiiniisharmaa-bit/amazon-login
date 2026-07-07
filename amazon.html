@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Sign-In</title>
+  <!-- Font Awesome for subtle icons (optional, but adds polish) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Amazon Ember', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 350px;
+      margin: 0 auto;
+    }
+
+    /* ---- Amazon logo ---- */
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo svg {
+      width: 103px;
+      height: 31px;
+    }
+    .logo a {
+      display: inline-block;
+    }
+
+    /* ---- main card ---- */
+    .login-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px 26px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .login-card h1 {
+      font-weight: 400;
+      font-size: 28px;
+      margin-bottom: 16px;
+      color: #111;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 2px;
+    }
+
+    .form-group label .label-extra {
+      font-weight: 400;
+      font-size: 13px;
+      color: #0066c0;
+      float: right;
+      cursor: pointer;
+    }
+    .form-group label .label-extra:hover {
+      color: #c45500;
+      text-decoration: underline;
+    }
+
+    .form-group input {
+      width: 100%;
+      height: 31px;
+      padding: 3px 7px;
+      background: #fff;
+      border: 1px solid #a6a6a6;
+      border-radius: 3px;
+      font-size: 13px;
+      transition: border 0.15s, box-shadow 0.15s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #e77600;
+      box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+    }
+
+    .continue-btn {
+      width: 100%;
+      height: 31px;
+      background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+      border: 1px solid #a88734;
+      border-radius: 3px;
+      color: #111;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+      transition: background 0.1s;
+      margin-top: 4px;
+    }
+    .continue-btn:hover {
+      background: linear-gradient(to bottom, #f5d78c, #eeb933);
+      border-color: #9c7e31;
+    }
+    .continue-btn:active {
+      background: #eeb933;
+      border-color: #9c7e31;
+    }
+
+    /* ---- legal text / disclaimer ---- */
+    .legal-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #555;
+      margin-top: 18px;
+    }
+    .legal-text a {
+      color: #0066c0;
+      text-decoration: none;
+    }
+    .legal-text a:hover {
+      color: #c45500;
+      text-decoration: underline;
+    }
+
+    /* ---- "New to Amazon?" divider ---- */
+    .divider-section {
+      margin-top: 26px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: #e7e7e7;
+    }
+    .divider-text {
+      font-size: 12px;
+      color: #767676;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .create-account-btn {
+      width: 100%;
+      height: 31px;
+      background: linear-gradient(to bottom, #f7f7fa, #e7e9ec);
+      border: 1px solid #adb1b8;
+      border-radius: 3px;
+      color: #111;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+      transition: background 0.1s;
+      margin-top: 10px;
+    }
+    .create-account-btn:hover {
+      background: linear-gradient(to bottom, #e7e9ec, #d5d8df);
+      border-color: #9fa3aa;
+    }
+    .create-account-btn:active {
+      background: #d5d8df;
+      border-color: #9fa3aa;
+    }
+
+    /* ---- footer ---- */
+    .login-footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 11px;
+      color: #555;
+    }
+    .login-footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .login-footer .footer-links a {
+      color: #0066c0;
+      text-decoration: none;
+      font-size: 11px;
+    }
+    .login-footer .footer-links a:hover {
+      color: #c45500;
+      text-decoration: underline;
+    }
+    .login-footer .copyright {
+      color: #555;
+      font-size: 11px;
+    }
+
+    /* small screens */
+    @media (max-width: 400px) {
+      .login-card {
+        padding: 15px 18px;
+      }
+      .login-card h1 {
+        font-size: 24px;
+      }
+    }
+
+    /* ---- helper utilities ---- */
+    .hidden {
+      display: none;
+    }
+  </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NTV0NLN2X5"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-NTV0NLN2X5');
+</script>
+
+</head>
+<body>
+  <div class="login-container">
+    <!-- Amazon logo (SVG) -->
+    <div class="logo">
+      <a href="#" aria-label="Amazon">
+        <img width="100px" src="https://1000logos.net/wp-content/uploads/2016/10/Amazon-logo-meaning.jpg" alt="">
+      </a>
+    </div>
+
+    <!-- login card -->
+    <div class="login-card">
+      <h1>Sign in</h1>
+
+      <form id="loginForm" action="#" method="post">
+        <!-- Email / mobile -->
+        <div class="form-group">
+          <label for="email">Email or mobile phone number</label>
+          <input type="email" id="email" name="email" autocomplete="email" required />
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password">
+            Password
+            <span class="label-extra"><i class="fas fa-key" style="margin-right: 2px;"></i> Forgot your password?</span>
+          </label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required />
+        </div>
+
+        <!-- Continue button -->
+        <button type="submit" class="continue-btn">Continue</button>
+      </form>
+
+      <!-- small legal text -->
+      <div class="legal-text">
+        By continuing, you agree to Amazon's 
+        <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
+      </div>
+
+      <!-- divider + create account -->
+      <div class="divider-section">
+        <span class="divider-line"></span>
+        <span class="divider-text">New to Amazon?</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <button class="create-account-btn" id="createAccountBtn">Create your Amazon account</button>
+    </div>
+
+    <!-- footer links -->
+    <div class="login-footer">
+      <div class="footer-links">
+        <a href="#">Conditions of Use</a>
+        <a href="#">Privacy Notice</a>
+        <a href="#">Help</a>
+      </div>
+      <div class="copyright">
+        © 1996-2026, Amazon.com, Inc. or its affiliates
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Simple form submission handler – prevents actual POST and shows an alert
+      const form = document.getElementById('loginForm');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!email || !password) {
+          alert('Please fill in both email and password fields.');
+          return;
+        }
+
+        // Basic email validation (just a simple check for demo)
+        if (!email.includes('@') || !email.includes('.')) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+
+        // Simulate successful login (demo only)
+        alert('Sign-in successful! (demo)\nEmail: ' + email);
+        // In a real scenario, you would submit the form or redirect.
+        // window.location.href = 'https://www.amazon.com/your-account';
+      });
+
+      // "Create your Amazon account" button – simple demo action
+      const createBtn = document.getElementById('createAccountBtn');
+      createBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Redirect to account creation page (demo)');
+        // window.location.href = 'https://www.amazon.com/ap/register';
+      });
+
+      // "Forgot your password?" link (click on the label span)
+      const forgotLink = document.querySelector('.label-extra');
+      if (forgotLink) {
+        forgotLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('Password recovery flow (demo)');
+          // window.location.href = 'https://www.amazon.com/ap/forgotpassword';
+        });
+      }
+
+      // optional: any other links (footer) can be handled similarly, but we keep them as regular anchors.
+      // For demo, we prevent default on footer links to avoid page jumps.
+      const footerLinks = document.querySelectorAll('.footer-links a');
+      footerLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('Demo: ' + this.textContent.trim() + ' page');
+        });
+      });
+
+      // logo click demo
+      const logoLink = document.querySelector('.logo a');
+      if (logoLink) {
+        logoLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('Amazon homepage (demo)');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
